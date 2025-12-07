@@ -23,10 +23,18 @@ pipeline {
 
         stage('Docker Build & Push') {
             steps {
-                bat "docker build -t %IMAGE_NAME%:%VERSION% ."
-                withCredentials([usernamePassword(credentialsId: 'docker-creds', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+                withCredentials([
+                    usernamePassword(
+                        credentialsId: 'dockerhub-user',   // 👈 Existing ID from Jenkins
+                        usernameVariable: 'USER',
+                        passwordVariable: 'PASS'
+                    )
+                ]) {
+                    // Login BEFORE pushing
                     bat "docker login -u %USER% -p %PASS%"
                 }
+
+                bat "docker build -t %IMAGE_NAME%:%VERSION% ."
                 bat "docker push %IMAGE_NAME%:%VERSION%"
             }
         }
