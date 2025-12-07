@@ -12,12 +12,6 @@ pipeline {
 
     stages {
 
-        stage('Checkout Code') {
-            steps {
-                git 'https://github.com/Teja-swaroop141/weather-devop.git'
-            }
-        }
-
         stage('Build React App') {
             steps {
                 dir('weather-app') {
