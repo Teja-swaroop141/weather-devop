@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {  Wind, Sunrise, Sunset, Search, MapPin, Sun } from "lucide-react";
+import { Wind, Sunrise, Sunset, Search, MapPin, Sun } from "lucide-react";
 
 function App() {
   const [city, setCity] = useState("Mysore");
@@ -8,13 +8,13 @@ function App() {
   const [error, setError] = useState("");
 
   const popularCities = [
-    "Mysore", "Bangalore", "Mumbai", "Delhi", "Chennai", 
+    "Mysore", "Bangalore", "Mumbai", "Delhi", "Chennai",
     "Kolkata", "Hyderabad", "Pune", "Ahmedabad", "Jaipur",
     "Surat", "Lucknow", "Kanpur", "Nagpur", "Indore",
     "Thane", "Bhopal", "Visakhapatnam", "Pimpri-Chinchwad", "Patna"
   ];
 
-  const fetchWeather = async (cityName = city) => {
+  const fetchWeather = React.useCallback(async (cityName = city) => {
     if (!cityName.trim()) {
       setError("Please select a city");
       return;
@@ -22,7 +22,7 @@ function App() {
 
     setLoading(true);
     setError("");
-    
+
     try {
       const geoRes = await fetch(
         `https://geocoding-api.open-meteo.com/v1/search?name=${cityName}`
@@ -57,7 +57,8 @@ function App() {
       setError("Unable to fetch weather data. Please try again.");
     }
     setLoading(false);
-  };
+  }, [city]);
+
 
   const handleCityChange = (e) => {
     const selectedCity = e.target.value;
@@ -70,7 +71,8 @@ function App() {
   // Load Mysore weather on initial mount
   React.useEffect(() => {
     fetchWeather("Mysore");
-  }, []);
+  }, [fetchWeather]);
+
 
 
   const getWeatherDescription = (code) => {
@@ -147,11 +149,11 @@ function App() {
             alignItems: 'center'
           }}>
             <div style={{ position: 'relative', flex: 1 }}>
-              <MapPin style={{ 
-                position: 'absolute', 
-                left: '16px', 
-                top: '50%', 
-                transform: 'translateY(-50%)', 
+              <MapPin style={{
+                position: 'absolute',
+                left: '16px',
+                top: '50%',
+                transform: 'translateY(-50%)',
                 color: '#9CA3AF',
                 pointerEvents: 'none',
                 zIndex: 1
@@ -213,7 +215,7 @@ function App() {
               {loading ? 'Loading...' : 'Get Weather'}
             </button>
           </div>
-          
+
           {error && (
             <div style={{
               padding: '12px 16px',
