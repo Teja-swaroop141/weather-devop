@@ -20,8 +20,10 @@ pipeline {
 
         stage('Build React App') {
             steps {
-                bat 'npm install'
-                bat 'npm run build'
+                dir('weather-app') {
+                    bat 'npm install'
+                    bat 'npm run build'
+                }
             }
         }
 
