@@ -1,9 +1,9 @@
 # Step 1: Build React App
 FROM node:18 AS build
 WORKDIR /app
-COPY package*.json ./
+COPY weather-app/package*.json ./
 RUN npm install
-COPY . .
+COPY weather-app ./
 RUN npm run build
 
 # Step 2: Serve using NGINX
