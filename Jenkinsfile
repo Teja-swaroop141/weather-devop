@@ -41,15 +41,15 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 withCredentials([
-                    file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG_FILE')
-                ]) {
-                    bat """
-                    set KUBECONFIG=%KUBECONFIG_FILE%
-                    kubectl set image deployment/weather-app weather=%IMAGE_NAME%:%VERSION% --record
-                    kubectl rollout status deployment/weather-app --timeout=60s
-                    """
+                    file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')
+            ]) {
+                 bat """
+                 kubectl set image deployment/weather-app weather=%IMAGE_NAME%:%VERSION% --record
+                 kubectl rollout status deployment/weather-app
+                 """
                 }
-            }
+             }
         }
+
     }
 }
