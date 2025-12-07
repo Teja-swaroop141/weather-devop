@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         IMAGE_NAME = "tejaswaroop29/weather-app"
-        VERSION = "v${BUILD_NUMBER}"
+        VERSION    = "v${BUILD_NUMBER}"
     }
 
     tools {
@@ -25,12 +25,11 @@ pipeline {
             steps {
                 withCredentials([
                     usernamePassword(
-                        credentialsId: 'dockerhub-user',   // 👈 Existing ID from Jenkins
+                        credentialsId: 'dockerhub-user',  // your existing Docker Hub creds
                         usernameVariable: 'USER',
                         passwordVariable: 'PASS'
                     )
                 ]) {
-                    // Login BEFORE pushing
                     bat "docker login -u %USER% -p %PASS%"
                 }
 
@@ -41,10 +40,15 @@ pipeline {
 
         stage('Deploy to Kubernetes') {
             steps {
-                bat """
-                kubectl set image deployment/weather-app weather=%IMAGE_NAME%:%VERSION%
-                kubectl rollout status deployment/weather-app
-                """
+                withCredentials([
+                    file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG_FILE')
+                ]) {
+                    bat """
+                    set KUBECONFIG=%KUBECONFIG_FILE%
+                    kubectl set image deployment/weather-app weather=%IMAGE_NAME%:%VERSION% --record
+                    kubectl rollout status deployment/weather-app --timeout=60s
+                    """
+                }
             }
         }
     }
