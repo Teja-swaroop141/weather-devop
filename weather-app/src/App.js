@@ -129,7 +129,7 @@ function App() {
                 color: '#FCD34D'
               }} />
             </div>
-            <h1 style={{ margin: 0, fontSize: '36px', fontWeight: '600' }}>Weather Forecast updated</h1>
+            <h1 style={{ margin: 0, fontSize: '36px', fontWeight: '600' }}>Weather Forecast </h1>
           </div>
           <p style={{ margin: 0, opacity: 0.9, fontSize: '16px' }}>Real-time weather information for any city worldwide</p>
         </div>
